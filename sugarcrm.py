@@ -1,3 +1,4 @@
+import base64
 import hashlib
 import json
 import requests
@@ -12,7 +13,7 @@ class API:
             'password': hashlib.md5(password).hexdigest(),
             'version': "1"
         }]
-        result = self.api('login', data)
+        result = self.request('login', data)
         self.session_id = result['id']
 
     def request(self, method, params):
@@ -25,6 +26,12 @@ class API:
         r = requests.post(self.url, data=data)
         return json.loads(r.text)
 
+    def get_entries(self, module, ids, track_view=False):
+        if not isinstance(ids, list):
+            ids = [ids,]
+        data = [self.session_id, module, ids, [], [], track_view]
+        return self.request('get_entries', data)['entry_list']
+
     def get_entry_list(self, obj):
         data = [self.session_id, obj.type, obj.query, "", 0, [], [], 2, 0, False]
         return self.request('get_entry_list', data)
@@ -34,8 +41,16 @@ class API:
         result = self.request('set_entry', data)
         obj.id = result['id']
 
-    def set_note_attachment(self, obj, f):
-        pass
+    def set_note_attachment(self, note, f):
+        if isinstance(f, str):
+            f = open(f, 'rb')
+        fields = {
+            'id': note.id,
+            'filename': f.name,
+            'file': base64.b64encode(f.read())
+        }
+        data = [self.session_id, fields]
+        return self.request('set_note_attachment', data)
 
 
 class SugarObject:
