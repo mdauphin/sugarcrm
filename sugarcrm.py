@@ -26,6 +26,10 @@ class API:
         r = requests.post(self.url, data=data)
         return json.loads(r.text)
 
+    def get_entry(self, module, id, track_view=False):
+        data = [self.session_id, module, id, [], [], track_view]
+        return self.request('get_entry', data)['entry_list']
+
     def get_entries(self, module, ids, track_view=False):
         if not isinstance(ids, list):
             ids = [ids,]
@@ -55,13 +59,15 @@ class API:
 
 class SugarObject:
 
-    def __init__(self, name):
+    def __init__(self, name=None):
         self.name = name
 
     @property
     def fields(self):
         params = []
         for key, value in self.__dict__.items():
+            if not value:
+                continue
             params.append({
                 'name': key,
                 'value': value
@@ -80,6 +86,13 @@ class SugarObject:
                 q += "%s.%s='%s' " % (self.type.lower(), key, str(value))
         print q
         return q
+
+
+class Opportunity(SugarObject):
+
+    @property
+    def type(self):
+        return "Opportunities"
 
 
 class Note(SugarObject):
