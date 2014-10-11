@@ -33,3 +33,9 @@ Example Usage
     user_id = result[0]['name_value_list']['assigned_user_id']['value']
     result = sugar.get_entry("Users", user_id)
     email = result[0]['name_value_list']['email1']['value']
+
+    # Change the status of an Opportunity
+    op = sugarcrm.Opportunity()
+    op.id = "82f72939-735e-53a2-0944-5418c4edae2a"
+    op.sales_stage = "Approved"
+    sugar.set_entry(op)

@@ -24,7 +24,9 @@ class API:
             'rest_data': json.dumps(params)
         }
         r = requests.post(self.url, data=data)
-        return json.loads(r.text)
+        if r.status_code == 200:
+            return json.loads(r.text)
+        return {'status_code': r.status_code}
 
     def get_entry(self, module, id, track_view=False):
         data = [self.session_id, module, id, [], [], track_view]
@@ -43,6 +45,8 @@ class API:
     def set_entry(self, obj):
         data = [self.session_id, obj.type, obj.fields]
         result = self.request('set_entry', data)
+        if 'status_code' in result:
+            return False
         obj.id = result['id']
 
     def set_note_attachment(self, note, f):
@@ -84,7 +88,6 @@ class SugarObject:
                 q += "%s.%s LIKE '%s' " % (self.type.lower(), key, str(value))
             else:
                 q += "%s.%s='%s' " % (self.type.lower(), key, str(value))
-        print q
         return q
 
 
