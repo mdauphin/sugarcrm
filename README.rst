@@ -93,6 +93,16 @@ class sugarcrm.API(url, username, password, app="Python", lang="en_us")
 API Methods
 -----------
 
+get_available_modules(filter="default")
+    Retrieves a list of available modules in the system.
+    Possible filter values: "default", "mobile", "all"
+
+.. code-block:: python
+
+    modules = sugar.get_available_modules()
+    for m in modules:
+        print m.module_key
+
 get_entry(module, object_id, track_view=False)
     Retrieves a single object based on object ID.
 
@@ -149,9 +159,6 @@ set_note_attachment(note, attachment)
         sugar.set_note_attachment(note1, pdf_file)
     sugar.set_note_attachment(note2, "test2.pdf")
     print note1.filename, note2.filename
-
-get_available_modules()
-    Method not implemented yet.
 
 get_document_revision()
     Method not implemented yet.

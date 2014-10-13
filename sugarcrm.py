@@ -38,8 +38,17 @@ class API:
         raise SugarError("SugarCRM API _request returned status code %d" \
                          % r.status_code)
 
-    def get_available_modules(self):
-        raise SugarError("Method not implemented yet.")
+    def get_available_modules(self, filter="default"):
+        """Retrieves a list of available modules in the system."""
+        data = [self.session_id, filter]
+        results = self._request('get_available_modules', data)['modules']
+        ret = []
+        for module in results:
+            m = Module()
+            for key, value in module.items():
+                setattr(m, key, value)
+            ret.append(m)
+        return ret
 
     def get_document_revision(self):
         raise SugarError("Method not implemented yet.")
@@ -243,13 +252,15 @@ class SugarObject:
 class Contact(SugarObject):
     module = "Contacts"
 
-
-class Opportunity(SugarObject):
-    module = "Opportunities"
-
+class Module(SugarObject):
+    module = "Modules"
 
 class Note(SugarObject):
     module = "Notes"
+
+
+class Opportunity(SugarObject):
+    module = "Opportunities"
 
 
 class SugarError(Exception):
