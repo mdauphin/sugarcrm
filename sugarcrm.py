@@ -12,7 +12,7 @@ __version__ = '0.1-dev'
 import base64
 import hashlib
 import json
-import _requests
+import requests
 
 
 class API:
@@ -34,7 +34,7 @@ class API:
             'response_type': "JSON",
             'rest_data': json.dumps(params)
         }
-        r = _requests.post(self.url, data=data)
+        r = requests.post(self.url, data=data)
         if r.status_code == 200:
             return json.loads(r.text)
         raise SugarError("SugarCRM API _request returned status code %d" \
@@ -199,8 +199,9 @@ class API:
 
 class SugarObject:
 
-    def __init__(self, name=None):
-        self.name = name
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
     @property
     def fields(self):

@@ -17,7 +17,7 @@ Example Usage
     sugar = sugarcrm.API(url, username, password)
 
     # Create a new note
-    note = sugarcrm.Note("Test Note")
+    note = sugarcrm.Note(name="Test Note")
 
     # Save note
     sugar.set_entry(note)
@@ -26,12 +26,11 @@ Example Usage
     sugar.set_note_attachment(note, "sugarcrm.py")
 
     # Query for all notes that have a name that begins with "Test"
-    note_query = sugarcrm.Note("Test%")
+    note_query = sugarcrm.Note(name="Test%")
     results = sugar.get_entry_list(note_query)
 
     # Query for all contacts with the first name "Mylee"
-    contact_query = sugarcrm.Contact()
-    contact_query.first_name = "Mylee"
+    contact_query = sugarcrm.Contact(first_name="Mylee")
     results = sugar.get_entry_list(contact_query)
 
     # Get the email address for the user assigned to an Opportunity
@@ -40,8 +39,7 @@ Example Usage
     print user.email1
 
     # Change the status of an Opportunity
-    op = sugarcrm.Opportunity()
-    op.id = "82f72939-735e-53a2-0944-5418c4edae2a"
+    op = sugarcrm.Opportunity(id="82f72939-735e-53a2-0944-5418c4edae2a")
     op.sales_stage = "Approved"
     sugar.set_entry(op)
 
@@ -123,8 +121,7 @@ get_entry_list(query_object)
 .. code-block:: python
 
     # Get a list of all notes with a name that begins with "Test"
-    nq = sugarcrm.Note()
-    note.name = "Test%"
+    nq = sugarcrm.Note(name="Test%")
     notes = sugar.get_entry_list(nq)
     for note in notes:
         print note.name
@@ -136,6 +133,7 @@ set_entry(sugar_object)
 
     note = sugarcrm.Note()
     note.name = "Test Note"
+    note.assigned_user_id = "82f72939-735e-53a2-0944-5418c4edae2a"
     sugar.set_entry(note)
     print note.id
 
