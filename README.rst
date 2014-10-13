@@ -95,14 +95,16 @@ class sugarcrm.API(url, username, password)
 API Methods
 -----------
 
-sugar.get_entry(module, id, track_view=False)
+get_entry(module, object_id, track_view=False)
+    Retrieves a single object based on object ID.
 
 .. code-block:: python
 
     note = sugar.get_entry("Notes", "f0c78aab-e051-174a-12aa-5439a7146977")
     print note.name
 
-sugar.get_entries(module, ids, track_view=False)
+get_entries(module, object_ids, track_view=False)
+    Retrieves a list of objects based on specified object IDs.
 
 .. code-block:: python
 
@@ -115,7 +117,8 @@ sugar.get_entries(module, ids, track_view=False)
     for note in notes:
         print note.name
 
-sugar.get_entry_list(query_object)
+get_entry_list(query_object)
+    Retrieves a list of objects based on query specifications.
 
 .. code-block:: python
 
@@ -126,7 +129,8 @@ sugar.get_entry_list(query_object)
     for note in notes:
         print note.name
 
-sugar.set_entry(obj)
+set_entry(sugar_object)
+    Creates or updates a specific object.
 
 .. code-block:: python
 
@@ -135,7 +139,8 @@ sugar.set_entry(obj)
     sugar.set_entry(note)
     print note.id
 
-sugar.set_note_attachment(note, f)
+set_note_attachment(note, attachment)
+    Creates an attachmentand associates it to a specific note object.
 
 .. code-block:: python
 
@@ -143,6 +148,105 @@ sugar.set_note_attachment(note, f)
         sugar.set_note_attachment(note1, pdf_file)
     sugar.set_note_attachment(note2, "test2.pdf")
     print note1.filename, note2.filename
+
+get_available_modules()
+    Method not implemented yet.
+
+get_document_revision()
+    Method not implemented yet.
+
+get_entries_count()
+    Method not implemented yet.
+
+get_language_definition()
+    Method not implemented yet.
+
+get_last_viewed()
+    Method not implemented yet.
+
+get_modified_relationships()
+    Method not implemented yet.
+
+get_module_fields()
+    Method not implemented yet.
+
+get_module_fields_md5()
+    Method not implemented yet.
+
+get_module_layout()
+    Method not implemented yet.
+
+get_note_attachment()
+    Method not implemented yet.
+
+get_quotes_pdf()
+    Method not implemented yet.
+
+get_relationships()
+    Method not implemented yet.
+
+get_report_entries()
+    Method not implemented yet.
+
+get_report_pdf()
+    Method not implemented yet.
+
+get_server_info()
+    Method not implemented yet.
+
+get_upcoming_activities()
+    Method not implemented yet.
+
+get_user_id()
+    Method not implemented yet.
+
+get_user_team_id()
+    Method not implemented yet.
+
+job_queue_cycle()
+    Method not implemented yet.
+
+job_queue_next()
+    Method not implemented yet.
+
+job_queue_run()
+    Method not implemented yet.
+
+login()
+    Method not implemented yet.
+
+logout()
+    Method not implemented yet.
+
+oauth_access()
+    Method not implemented yet.
+
+seamless_login()
+    Method not implemented yet.
+
+search_by_module()
+    Method not implemented yet.
+
+set_campaign_merge()
+    Method not implemented yet.
+
+set_document_revision()
+    Method not implemented yet.
+
+set_entries()
+    Method not implemented yet.
+
+set_relationship()
+    Method not implemented yet.
+
+set_relationships()
+    Method not implemented yet.
+
+snip_import_emails()
+    Method not implemented yet.
+
+snip_update_contacts()
+    Method not implemented yet.
 
 
 Development Version

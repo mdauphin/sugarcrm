@@ -12,7 +12,7 @@ __version__ = '0.1-dev'
 import base64
 import hashlib
 import json
-import requests
+import _requests
 
 
 class API:
@@ -24,25 +24,32 @@ class API:
             'password': hashlib.md5(password).hexdigest(),
             'version': "1"
         }]
-        result = self.request('login', data)
+        result = self._request('login', data)
         self.session_id = result['id']
 
-    def request(self, method, params):
+    def _request(self, method, params):
         data = {
             'method': method,
             'input_type': "JSON",
             'response_type': "JSON",
             'rest_data': json.dumps(params)
         }
-        r = requests.post(self.url, data=data)
+        r = _requests.post(self.url, data=data)
         if r.status_code == 200:
             return json.loads(r.text)
-        raise SugarError("SugarCRM API request returned status code %d" \
+        raise SugarError("SugarCRM API _request returned status code %d" \
                          % r.status_code)
 
+    def get_available_modules(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_document_revision(self):
+        raise SugarError("Method not implemented yet.")
+
     def get_entry(self, module, id, track_view=False):
+        """Retrieves a single object based on object ID."""
         data = [self.session_id, module, id, [], [], track_view]
-        result = self.request('get_entry', data)['entry_list'][0]
+        result = self._request('get_entry', data)['entry_list'][0]
         obj = SugarObject()
         obj.module = module
         for key in result['name_value_list']:
@@ -50,10 +57,11 @@ class API:
         return obj
 
     def get_entries(self, module, ids, track_view=False):
+        """Retrieves a list of objects based on specified object IDs."""
         if not isinstance(ids, list):
             ids = [ids,]
         data = [self.session_id, module, ids, [], [], track_view]
-        results = self.request('get_entries', data)['entry_list']
+        results = self._request('get_entries', data)['entry_list']
         ret = []
         for result in results:
             obj = SugarObject()
@@ -63,9 +71,13 @@ class API:
             ret.append(obj)
         return ret
 
+    def get_entries_count(self):
+        raise SugarError("Method not implemented yet.")
+
     def get_entry_list(self, q):
+        """Retrieves a list of objects based on query specifications."""
         data = [self.session_id, q.module, q.query, "", 0, [], [], 0, 0, False]
-        results = self.request('get_entry_list', data)['entry_list']
+        results = self._request('get_entry_list', data)['entry_list']
         ret = []
         for result in results:
             obj = SugarObject()
@@ -75,13 +87,93 @@ class API:
             ret.append(obj)
         return ret
 
+    def get_language_definition(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_last_viewed(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_modified_relationships(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_module_fields(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_module_fields_md5(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_module_layout(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_note_attachment(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_quotes_pdf(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_relationships(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_report_entries(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_report_pdf(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_server_info(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_upcoming_activities(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_user_id(self):
+        raise SugarError("Method not implemented yet.")
+
+    def get_user_team_id(self):
+        raise SugarError("Method not implemented yet.")
+
+    def job_queue_cycle(self):
+        raise SugarError("Method not implemented yet.")
+
+    def job_queue_next(self):
+        raise SugarError("Method not implemented yet.")
+
+    def job_queue_run(self):
+        raise SugarError("Method not implemented yet.")
+
+    def login(self):
+        raise SugarError("Method not implemented yet.")
+
+    def logout(self):
+        raise SugarError("Method not implemented yet.")
+
+    def oauth_access(self):
+        raise SugarError("Method not implemented yet.")
+
+    def seamless_login(self):
+        raise SugarError("Method not implemented yet.")
+
+    def search_by_module(self):
+        raise SugarError("Method not implemented yet.")
+
+    def set_campaign_merge(self):
+        raise SugarError("Method not implemented yet.")
+
+    def set_document_revision(self):
+        raise SugarError("Method not implemented yet.")
+
+    def set_entries(self):
+        raise SugarError("Method not implemented yet.")
+
     def set_entry(self, obj):
+        """Creates or updates a specific object."""
         data = [self.session_id, obj.module, obj.fields]
-        result = self.request('set_entry', data)
+        result = self._request('set_entry', data)
         obj.id = result['id']
         return obj
 
     def set_note_attachment(self, note, f):
+        """Creates an attachmentand associates it to a specific note object."""
         if isinstance(f, str):
             f = open(f, 'rb')
         fields = {
@@ -90,7 +182,19 @@ class API:
             'file': base64.b64encode(f.read())
         }
         data = [self.session_id, fields]
-        return self.request('set_note_attachment', data)
+        return self._request('set_note_attachment', data)
+
+    def set_relationship(self):
+        raise SugarError("Method not implemented yet.")
+
+    def set_relationships(self):
+        raise SugarError("Method not implemented yet.")
+
+    def snip_import_emails(self):
+        raise SugarError("Method not implemented yet.")
+
+    def snip_update_contacts(self):
+        raise SugarError("Method not implemented yet.")
 
 
 class SugarObject:
