@@ -81,7 +81,7 @@ SugarCRM Objects
 API Object
 ----------
 
-class sugarcrm.API(url, username, password)
+class sugarcrm.API(url, username, password, app="Python", lang="en_us")
     The main class used to connect to the SugarCRM API and make quests with.
 
 .. code-block:: python
@@ -125,6 +125,9 @@ get_entry_list(query_object)
     notes = sugar.get_entry_list(nq)
     for note in notes:
         print note.name
+
+login(username, password, app="Python", lang="en_us")
+    Logs a user into the SugarCRM application.
 
 set_entry(sugar_object)
     Creates or updates a specific object.
@@ -208,9 +211,6 @@ job_queue_next()
     Method not implemented yet.
 
 job_queue_run()
-    Method not implemented yet.
-
-login()
     Method not implemented yet.
 
 logout()

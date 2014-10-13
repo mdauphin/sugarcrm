@@ -17,14 +17,12 @@ import requests
 
 class API:
 
-    def __init__(self, url, username, password):
+    def __init__(self, url, username, password, app="Python", lang="en_us"):
         self.url = url
-        data = [{
-            'user_name': username,
-            'password': hashlib.md5(password).hexdigest(),
-            'version': "1"
-        }]
-        result = self._request('login', data)
+        self.username = username
+        self.application = app
+        self.language = lang
+        result = self.login(username, password)
         self.session_id = result['id']
 
     def _request(self, method, params):
@@ -141,8 +139,20 @@ class API:
     def job_queue_run(self):
         raise SugarError("Method not implemented yet.")
 
-    def login(self):
-        raise SugarError("Method not implemented yet.")
+    def login(self, username, password, app="Python", lang="en_us"):
+        """Logs a user into the SugarCRM application."""
+        data = [
+            {
+                'user_name': username,
+                'password': hashlib.md5(password).hexdigest()
+            },
+            app,
+            [{
+                'name': "language",
+                'value': lang
+            }]
+        ]
+        return self._request('login', data)
 
     def logout(self):
         raise SugarError("Method not implemented yet.")
