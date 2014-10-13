@@ -42,17 +42,33 @@ class API:
         if not isinstance(ids, list):
             ids = [ids,]
         data = [self.session_id, module, ids, [], [], track_view]
-        return self.request('get_entries', data)['entry_list']
+        results = self.request('get_entries', data)['entry_list']
+        ret = []
+        for result in results:
+            obj = SugarObject()
+            obj.type = module
+            for key in result['name_value_list']:
+                setattr(obj, key, result['name_value_list'][key]['value'])
+            ret.append(obj)
+        return ret
 
-    def get_entry_list(self, obj):
-        data = [self.session_id, obj.type, obj.query, "", 0, [], [], 2, 0, False]
-        return self.request('get_entry_list', data)
+    def get_entry_list(self, q):
+        data = [self.session_id, q.type, q.query, "", 0, [], [], 0, 0, False]
+        results = self.request('get_entry_list', data)['entry_list']
+        ret = []
+        for result in results:
+            obj = SugarObject()
+            obj.type = q.type
+            for key in result['name_value_list']:
+                setattr(obj, key, result['name_value_list'][key]['value'])
+            ret.append(obj)
+        return ret
 
     def set_entry(self, obj):
         data = [self.session_id, obj.type, obj.fields]
         result = self.request('set_entry', data)
         obj.id = result['id']
-        return True
+        return obj
 
     def set_note_attachment(self, note, f):
         if isinstance(f, str):
@@ -87,6 +103,8 @@ class SugarObject:
     def query(self):
         q = ""
         for key, value in self.__dict__.items():
+            if not value:
+                continue
             if q:
                 q += "AND "
             if value.find('%') >= 0:
@@ -94,6 +112,10 @@ class SugarObject:
             else:
                 q += "%s.%s='%s' " % (self.type.lower(), key, str(value))
         return q
+
+
+class Contact(SugarObject):
+    type = "Contacts"
 
 
 class Opportunity(SugarObject):
