@@ -1,3 +1,14 @@
+#  SugarCRM
+#  --------
+#  Python client for SugarCRM API.
+#
+#  Author:  ryanss <ryanssdev@icloud.com>
+#  Website: https://github.com/ryanss/sugarcrm
+#  License: MIT (see LICENSE file)
+
+__version__ = '0.1-dev'
+
+
 import base64
 import hashlib
 import json
@@ -33,7 +44,7 @@ class API:
         data = [self.session_id, module, id, [], [], track_view]
         result = self.request('get_entry', data)['entry_list'][0]
         obj = SugarObject()
-        obj.type = module
+        obj.module = module
         for key in result['name_value_list']:
             setattr(obj, key, result['name_value_list'][key]['value'])
         return obj
@@ -46,26 +57,26 @@ class API:
         ret = []
         for result in results:
             obj = SugarObject()
-            obj.type = module
+            obj.module = module
             for key in result['name_value_list']:
                 setattr(obj, key, result['name_value_list'][key]['value'])
             ret.append(obj)
         return ret
 
     def get_entry_list(self, q):
-        data = [self.session_id, q.type, q.query, "", 0, [], [], 0, 0, False]
+        data = [self.session_id, q.module, q.query, "", 0, [], [], 0, 0, False]
         results = self.request('get_entry_list', data)['entry_list']
         ret = []
         for result in results:
             obj = SugarObject()
-            obj.type = q.type
+            obj.module = q.module
             for key in result['name_value_list']:
                 setattr(obj, key, result['name_value_list'][key]['value'])
             ret.append(obj)
         return ret
 
     def set_entry(self, obj):
-        data = [self.session_id, obj.type, obj.fields]
+        data = [self.session_id, obj.module, obj.fields]
         result = self.request('set_entry', data)
         obj.id = result['id']
         return obj
@@ -108,22 +119,22 @@ class SugarObject:
             if q:
                 q += "AND "
             if value.find('%') >= 0:
-                q += "%s.%s LIKE '%s' " % (self.type.lower(), key, str(value))
+                q += "%s.%s LIKE '%s' " % (self.module.lower(), key, str(value))
             else:
-                q += "%s.%s='%s' " % (self.type.lower(), key, str(value))
+                q += "%s.%s='%s' " % (self.module.lower(), key, str(value))
         return q
 
 
 class Contact(SugarObject):
-    type = "Contacts"
+    module = "Contacts"
 
 
 class Opportunity(SugarObject):
-    type = "Opportunities"
+    module = "Opportunities"
 
 
 class Note(SugarObject):
-    type = "Notes"
+    module = "Notes"
 
 
 class SugarError(Exception):
