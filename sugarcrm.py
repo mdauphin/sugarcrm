@@ -26,11 +26,17 @@ class API:
         r = requests.post(self.url, data=data)
         if r.status_code == 200:
             return json.loads(r.text)
-        return {'status_code': r.status_code}
+        raise SugarError("SugarCRM API request returned status code %d" \
+                         % r.status_code)
 
     def get_entry(self, module, id, track_view=False):
         data = [self.session_id, module, id, [], [], track_view]
-        return self.request('get_entry', data)['entry_list']
+        result = self.request('get_entry', data)['entry_list'][0]
+        obj = SugarObject()
+        obj.type = module
+        for key in result['name_value_list']:
+            setattr(obj, key, result['name_value_list'][key]['value'])
+        return obj
 
     def get_entries(self, module, ids, track_view=False):
         if not isinstance(ids, list):
@@ -45,9 +51,8 @@ class API:
     def set_entry(self, obj):
         data = [self.session_id, obj.type, obj.fields]
         result = self.request('set_entry', data)
-        if 'status_code' in result:
-            return False
         obj.id = result['id']
+        return True
 
     def set_note_attachment(self, note, f):
         if isinstance(f, str):
@@ -92,14 +97,12 @@ class SugarObject:
 
 
 class Opportunity(SugarObject):
-
-    @property
-    def type(self):
-        return "Opportunities"
+    type = "Opportunities"
 
 
 class Note(SugarObject):
+    type = "Notes"
 
-    @property
-    def type(self):
-        return "Notes"
+
+class SugarError(Exception):
+    pass

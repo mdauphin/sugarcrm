@@ -29,10 +29,9 @@ Example Usage
     results = sugar.get_entry_list(note_query)
 
     # Get the email address for the user assigned to an Opportunity
-    result = sugar.get_entry("Opportunities", "82f72939-735e-53a2-0944-5418c4edae2a")
-    user_id = result[0]['name_value_list']['assigned_user_id']['value']
-    result = sugar.get_entry("Users", user_id)
-    email = result[0]['name_value_list']['email1']['value']
+    op = sugar.get_entry("Opportunities", "82f72939-735e-53a2-0944-5418c4edae2a")
+    user = sugar.get_entry("Users", op.assigned_user_id)
+    print user.email1
 
     # Change the status of an Opportunity
     op = sugarcrm.Opportunity()
