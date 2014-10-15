@@ -60,6 +60,9 @@ class API:
         obj = SugarObject()
         obj.module = module
         for key in result['name_value_list']:
+            if isinstance(key, dict):
+                # No object found
+                return None
             setattr(obj, key, result['name_value_list'][key]['value'])
         return obj
 
@@ -74,6 +77,9 @@ class API:
             obj = SugarObject()
             obj.module = module
             for key in result['name_value_list']:
+                if isinstance(key, dict):
+                    # No objects found
+                    return []
                 setattr(obj, key, result['name_value_list'][key]['value'])
             ret.append(obj)
         return ret
