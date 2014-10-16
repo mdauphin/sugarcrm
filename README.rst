@@ -139,6 +139,16 @@ get_entry_list(query_object)
 login(username, password, app="Python", lang="en_us")
     Logs a user into the SugarCRM application.
 
+set_document_revision(document, file)
+    Creates a new document revision for a specific document record.
+
+.. code-block:: python
+
+    doc = sugarcrm.Document(document_name="Test Doc", revision=1)
+    sugar.set_entry(doc)
+    sugar.set_document_revision(doc, "/path/to/test.pdf")
+
+
 set_entry(sugar_object)
     Creates or updates a specific object.
 
@@ -159,6 +169,17 @@ set_note_attachment(note, attachment)
         sugar.set_note_attachment(note1, pdf_file)
     sugar.set_note_attachment(note2, "test2.pdf")
     print note1.filename, note2.filename
+
+set_relationship(parent, child, delete=False)
+    Sets the relationships between two records.
+
+.. code-block:: python
+
+    doc = sugarcrm.Document(document_name="Test Doc", revision=1)
+    sugar.set_entry(doc)
+    sugar.set_document_revision(doc, "/path/to/test.pdf")
+    opportunity = sugar.get_entry("Opportunities", "5b671886-cfe4-36f5-fa9d-5418a24e4aca")
+    sugar.set_relationship(opportunity, doc)
 
 get_document_revision()
     Method not implemented yet.
@@ -235,13 +256,7 @@ search_by_module()
 set_campaign_merge()
     Method not implemented yet.
 
-set_document_revision()
-    Method not implemented yet.
-
 set_entries()
-    Method not implemented yet.
-
-set_relationship()
     Method not implemented yet.
 
 set_relationships()

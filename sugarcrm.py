@@ -184,8 +184,18 @@ class API:
     def set_campaign_merge(self):
         raise SugarError("Method not implemented yet.")
 
-    def set_document_revision(self):
-        raise SugarError("Method not implemented yet.")
+    def set_document_revision(self, doc, f, revision=None):
+        """Creates a new document revision for a specific document record."""
+        if isinstance(f, str) or isinstance(f, unicode):
+            f = open(f, 'rb')
+            fields = {
+                'id': doc.id,
+                'filename': f.name,
+                'file': base64.b64encode(f.read()),
+                'revision': revision or doc.revision,
+            }
+            data = [self.session_id, fields]
+            return self._request('set_document_revision', data)
 
     def set_entries(self):
         raise SugarError("Method not implemented yet.")
@@ -199,7 +209,7 @@ class API:
 
     def set_note_attachment(self, note, f):
         """Creates an attachmentand associates it to a specific note object."""
-        if isinstance(f, str):
+        if isinstance(f, str) or isinstance(f, unicode):
             f = open(f, 'rb')
         fields = {
             'id': note.id,
@@ -209,8 +219,17 @@ class API:
         data = [self.session_id, fields]
         return self._request('set_note_attachment', data)
 
-    def set_relationship(self):
-        raise SugarError("Method not implemented yet.")
+    def set_relationship(self, parent, child, delete=False):
+        """Sets relationships between two records."""
+        delete = int(delete)
+        related_ids = [child.id,]
+        name_value_list = [{
+            'name': "%s_%s" % (parent.module.lower(), child.module.lower()),
+            'value': 'Other',
+        }]
+        data = [self.session_id, parent.module, parent.id,
+                child.module.lower(), related_ids, name_value_list, delete]
+        return self._request('set_relationship', data)
 
     def set_relationships(self):
         raise SugarError("Method not implemented yet.")
@@ -258,8 +277,14 @@ class SugarObject:
 class Contact(SugarObject):
     module = "Contacts"
 
+
+class Document(SugarObject):
+    module = "Documents"
+
+
 class Module(SugarObject):
     module = "Modules"
+
 
 class Note(SugarObject):
     module = "Notes"
