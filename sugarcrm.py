@@ -12,6 +12,7 @@ __version__ = '0.1-dev'
 import base64
 import hashlib
 import json
+import os
 import requests
 
 
@@ -190,7 +191,7 @@ class API:
             f = open(f, 'rb')
             fields = {
                 'id': doc.id,
-                'filename': f.name,
+                'filename': f.name.split(os.sep)[-1],
                 'file': base64.b64encode(f.read()),
                 'revision': revision or doc.revision,
             }
