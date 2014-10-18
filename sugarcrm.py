@@ -275,12 +275,28 @@ class SugarObject:
         return q
 
 
+class Call(SugarObject):
+    module = "Calls"
+
+
+class Campaign(SugarObject):
+    module = "Campaigns"
+
+
 class Contact(SugarObject):
     module = "Contacts"
 
 
 class Document(SugarObject):
     module = "Documents"
+
+
+class Email(SugarObject):
+    module = "Emails"
+
+
+class Lead(SugarObject):
+    module = "Leads"
 
 
 class Module(SugarObject):
@@ -293,6 +309,26 @@ class Note(SugarObject):
 
 class Opportunity(SugarObject):
     module = "Opportunities"
+
+
+class Product(SugarObject):
+    module = "Products"
+
+
+class Prospect(SugarObject):
+    module = "Prospects"
+
+
+class ProspectList(SugarObject):
+    module = "ProspectLists"
+
+
+class Quote(SugarObject):
+    module = "Quotes"
+
+
+class Report(SugarObject):
+    module = "Reports"
 
 
 class SugarError(Exception):
