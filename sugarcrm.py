@@ -85,8 +85,10 @@ class API:
             ret.append(obj)
         return ret
 
-    def get_entries_count(self):
-        raise SugarError("Method not implemented yet.")
+    def get_entries_count(self, q, deleted=False):
+        """Retrieves a count of beans based on query specifications."""
+        data = [self.session_id, q.module, q.query, int(deleted)]
+        return self._request('get_entries_count', data)['result_count']
 
     def get_entry_list(self, q):
         """Retrieves a list of objects based on query specifications."""

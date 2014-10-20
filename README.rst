@@ -125,12 +125,24 @@ get_entries(module, object_ids, track_view=False)
     for note in notes:
         print note.name
 
+get_entries_count(query_object, deleted=False)
+    Retrieves a count of beans based on query specifications.
+
+.. code-block:: python
+
+    # Get a count of all Contacts with a first name of "Fred"
+    # and include Contacts that have been deleted
+    cq = sugarcrm.Contact(first_name="Fred")
+    contacts = sugar.get_entries_count(cq, deleted=True)
+    for contact in contacts:
+        print contact.first_name, contact.last_name
+
 get_entry_list(query_object)
     Retrieves a list of objects based on query specifications.
 
 .. code-block:: python
 
-    # Get a list of all notes with a name that begins with "Test"
+    # Get a list of all Notes with a name that begins with "Test"
     nq = sugarcrm.Note(name="Test%")
     notes = sugar.get_entry_list(nq)
     for note in notes:
@@ -182,9 +194,6 @@ set_relationship(parent, child, delete=False)
     sugar.set_relationship(opportunity, doc)
 
 get_document_revision()
-    Method not implemented yet.
-
-get_entries_count()
     Method not implemented yet.
 
 get_language_definition()
