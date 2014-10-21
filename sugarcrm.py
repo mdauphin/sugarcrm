@@ -88,11 +88,14 @@ class API:
     def get_entries_count(self, q, deleted=False):
         """Retrieves a count of beans based on query specifications."""
         data = [self.session_id, q.module, q.query, int(deleted)]
-        return self._request('get_entries_count', data)['result_count']
+        return int(self._request('get_entries_count', data)['result_count'])
 
-    def get_entry_list(self, q):
+    def get_entry_list(self, q, fields=(), order_by="",
+                       max_results=0, offset=0,
+                       deleted=False, favorites=False):
         """Retrieves a list of objects based on query specifications."""
-        data = [self.session_id, q.module, q.query, "", 0, [], [], 0, 0, False]
+        data = [self.session_id, q.module, q.query, order_by, offset, fields,
+                [], max_results, int(deleted), int(favorites)]
         results = self._request('get_entry_list', data)['entry_list']
         ret = []
         for result in results:

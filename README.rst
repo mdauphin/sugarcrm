@@ -132,19 +132,21 @@ get_entries_count(query_object, deleted=False)
 
     # Get a count of all Contacts with a first name of "Fred"
     # and include Contacts that have been deleted
-    cq = sugarcrm.Contact(first_name="Fred")
-    contacts = sugar.get_entries_count(cq, deleted=True)
+    contact_query = sugarcrm.Contact(first_name="Fred")
+    contacts = sugar.get_entries_count(contact_query, deleted=True)
     for contact in contacts:
         print contact.first_name, contact.last_name
 
-get_entry_list(query_object)
+get_entry_list(query_object, field_list=[], order_by="",
+                             max_results=0, offset=0,
+                             deleted=False, favorites=False)
     Retrieves a list of objects based on query specifications.
 
 .. code-block:: python
 
     # Get a list of all Notes with a name that begins with "Test"
-    nq = sugarcrm.Note(name="Test%")
-    notes = sugar.get_entry_list(nq)
+    note_query = sugarcrm.Note(name="Test%")
+    notes = sugar.get_entry_list(note_query)
     for note in notes:
         print note.name
 
