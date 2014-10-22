@@ -43,6 +43,22 @@ Example Usage
     op.sales_stage = "Approved"
     sugar.set_entry(op)
 
+    # Extract all non-empty email fields from all Contacts in SugarCRM
+    emails = set()
+    contact_query = sugarcrm.Contact()  # No filters provider finds all objects
+    contact_count = sugar.get_entries_count(contact_query, deleted=True)
+    print "Extracting emails from %d Contacts" % contact_count
+    # Grab 100 Contact objects at a time from SugarCRM
+    for offset in range(0, count, 100):
+        contacts = sugar.get_entry_list(contact_query, deleted=True,
+                                        max_results=100, offset=offset)
+        for contact in contacts:
+            for field in dir(contact):
+                if field.find("email") >= 0 and getattr(contact, field, "").find("@") >= 0:
+                    emails.add(getattr(contact, field).lower())
+    print "Found %d emails" % len(emails)
+
+
 
 Install
 -------
