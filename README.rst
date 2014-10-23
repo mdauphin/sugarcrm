@@ -153,9 +153,7 @@ get_entries_count(query_object, deleted=False)
     for contact in contacts:
         print contact.first_name, contact.last_name
 
-get_entry_list(query_object, field_list=[], order_by="",
-                             max_results=0, offset=0,
-                             deleted=False, favorites=False)
+get_entry_list(query_object, field_list=[], order_by="", max_results=0, offset=0, deleted=False, favorites=False)
     Retrieves a list of objects based on query specifications.
 
 .. code-block:: python
