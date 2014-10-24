@@ -35,7 +35,7 @@ class API:
         }
         r = requests.post(self.url, data=data)
         if r.status_code == 200:
-            return json.loads(r.text)
+            return json.loads(r.text.replace("&#039;", "'"))
         raise SugarError("SugarCRM API _request returned status code %d" \
                          % r.status_code)
 
