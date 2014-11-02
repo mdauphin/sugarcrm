@@ -36,8 +36,8 @@ class API:
         r = requests.post(self.url, data=data)
         if r.status_code == 200:
             return json.loads(r.text.replace("&#039;", "'"))
-        raise SugarError("SugarCRM API _request returned status code %d" \
-                         % r.status_code)
+        raise SugarError("SugarCRM API _request returned status code %d (%s)" \
+                         % (r.status_code, r.reason))
 
     def get_available_modules(self, filter="default"):
         """Retrieves a list of available modules in the system."""
