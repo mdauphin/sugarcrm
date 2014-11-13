@@ -102,19 +102,32 @@ class API:
         data = [self.session_id, q.module, q.query, int(deleted)]
         return int(self._request('get_entries_count', data)['result_count'])
 
-    def get_entry_list(self, q, fields=(), order_by="",
+    def get_entry_list(self, q, fields=(), links=dict(), order_by="",
                        max_results=0, offset=0,
                        deleted=False, favorites=False):
         """Retrieves a list of objects based on query specifications."""
+        relationships = []
+        for key, value in links.items():
+            relationships.append({'name': key.lower(), 'value': value})
         data = [self.session_id, q.module, q.query, order_by, offset, fields,
-                [], max_results, int(deleted), int(favorites)]
-        results = self._request('get_entry_list', data)['entry_list']
+                relationships, max_results, int(deleted), int(favorites)]
+        results = self._request('get_entry_list', data)
+        entry_list = results['entry_list']
         ret = []
-        for result in results:
+        for i, result in enumerate(entry_list):
             obj = SugarObject()
             obj.module = q.module
             for key in result['name_value_list']:
                 setattr(obj, key, result['name_value_list'][key]['value'])
+            if results['relationship_list']:
+                for m in results['relationship_list'][i]['link_list']:
+                    setattr(obj, m['name'], [])
+                    for record in m['records']:
+                        robj = SugarObject()
+                        robj.module = m['name']
+                        for k in record['link_value']:
+                            setattr(robj, k, record['link_value'][k]['value'])
+                        getattr(obj, m['name']).append(robj)
             ret.append(obj)
         return ret
 

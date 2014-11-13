@@ -119,7 +119,7 @@ get_available_modules(filter="default")
     for m in modules:
         print m.module_key
 
-get_entry(module, object_id, links=dict(), track_view=False)
+get_entry(module, object_id, links={}, track_view=False)
     Retrieves a single object based on object ID.
 
 .. code-block:: python
@@ -128,7 +128,7 @@ get_entry(module, object_id, links=dict(), track_view=False)
     print note.name
 
     # Get a lead and specific fields from linked contacts in one query
-    links = { 'Contacts': ['id', 'first_name', 'last_name'] }
+    links = {'Contacts': ['id', 'first_name', 'last_name']}
     lead = sugar.get_entry("Leads", "d7dac88d-ce33-d98a-da8b-5418bba9e664",
                            links=links)
     for c in lead.contacts:
@@ -160,7 +160,7 @@ get_entries_count(query_object, deleted=False)
     for contact in contacts:
         print contact.first_name, contact.last_name
 
-get_entry_list(query_object, field_list=[], order_by="", max_results=0, offset=0, deleted=False, favorites=False)
+get_entry_list(query_object, fields=[], links={}, order_by="", max_results=0, offset=0, deleted=False, favorites=False)
     Retrieves a list of objects based on query specifications.
 
 .. code-block:: python
@@ -170,6 +170,16 @@ get_entry_list(query_object, field_list=[], order_by="", max_results=0, offset=0
     notes = sugar.get_entry_list(note_query)
     for note in notes:
         print note.name
+
+    # Get a list of all Opportunities created since Sept 1, 2014 and include
+    # data about link contacts with each Opportunitity returned
+    q = sugarcrm.Opportunity()
+    q.query = "opportunities.date_entered > '2014-09-01'"
+    links = {'Contacts': ['id', 'first_name', 'last_name']}
+    results = sugar.get_entry_list(q, links=links)
+    for o in results:
+        for c in o.contacts:
+            print o.id, c.id, c.first_name, c.last_name
 
 login(username, password, app="Python", lang="en_us")
     Logs a user into the SugarCRM application.
