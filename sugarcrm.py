@@ -54,17 +54,29 @@ class API:
     def get_document_revision(self):
         raise SugarError("Method not implemented yet.")
 
-    def get_entry(self, module, id, track_view=False):
+    def get_entry(self, module, id, links=dict(), track_view=False):
         """Retrieves a single object based on object ID."""
-        data = [self.session_id, module, id, [], [], track_view]
-        result = self._request('get_entry', data)['entry_list'][0]
+        relationships = []
+        for key, value in links.items():
+            relationships.append({'name': key.lower(), 'value': value})
+        data = [self.session_id, module, id, [], relationships, track_view]
+        result = self._request('get_entry', data)
         obj = SugarObject()
         obj.module = module
-        for key in result['name_value_list']:
+        obj_data = result['entry_list'][0]['name_value_list']
+        for key in obj_data:
             if isinstance(key, dict):
                 # No object found
                 return None
-            setattr(obj, key, result['name_value_list'][key]['value'])
+            setattr(obj, key, obj_data[key]['value'])
+        for m in result['relationship_list'][0]:
+            setattr(obj, m['name'], [])
+            for record in m['records']:
+                robj = SugarObject()
+                robj.module = m['name']
+                for key in record:
+                    setattr(robj, key, record[key]['value'])
+                getattr(obj, m['name']).append(robj)
         return obj
 
     def get_entries(self, module, ids, track_view=False):

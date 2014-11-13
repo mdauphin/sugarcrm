@@ -119,13 +119,20 @@ get_available_modules(filter="default")
     for m in modules:
         print m.module_key
 
-get_entry(module, object_id, track_view=False)
+get_entry(module, object_id, links=dict(), track_view=False)
     Retrieves a single object based on object ID.
 
 .. code-block:: python
 
     note = sugar.get_entry("Notes", "f0c78aab-e051-174a-12aa-5439a7146977")
     print note.name
+
+    # Get a lead and specific fields from linked contacts in one query
+    links = { 'Contacts': ['id', 'first_name', 'last_name'] }
+    lead = sugar.get_entry("Leads", "d7dac88d-ce33-d98a-da8b-5418bba9e664",
+                           links=links)
+    for c in lead.contacts:
+        print c.id, c.first_name, c.last_name
 
 get_entries(module, object_ids, track_view=False)
     Retrieves a list of objects based on specified object IDs.
