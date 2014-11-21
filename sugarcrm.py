@@ -69,14 +69,15 @@ class API:
                 # No object found
                 return None
             setattr(obj, key, obj_data[key]['value'])
-        for m in result['relationship_list'][0]:
-            setattr(obj, m['name'], [])
-            for record in m['records']:
-                robj = SugarObject()
-                robj.module = m['name']
-                for key in record:
-                    setattr(robj, key, record[key]['value'])
-                getattr(obj, m['name']).append(robj)
+        if result['relationship_list']:
+            for m in result['relationship_list'][0]:
+                setattr(obj, m['name'], [])
+                for record in m['records']:
+                    robj = SugarObject()
+                    robj.module = m['name']
+                    for key in record:
+                        setattr(robj, key, record[key]['value'])
+                    getattr(obj, m['name']).append(robj)
         return obj
 
     def get_entries(self, module, ids, track_view=False):
