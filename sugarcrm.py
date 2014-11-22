@@ -13,6 +13,8 @@ import base64
 import hashlib
 import json
 import os
+import sys
+
 import requests
 
 
@@ -61,8 +63,7 @@ class API:
             relationships.append({'name': key.lower(), 'value': value})
         data = [self.session_id, module, id, [], relationships, track_view]
         result = self._request('get_entry', data)
-        obj = SugarObject()
-        obj.module = module
+        obj = SugarObject(module=module)
         obj_data = result['entry_list'][0]['name_value_list']
         for key in obj_data:
             if isinstance(key, dict):
@@ -73,8 +74,7 @@ class API:
             for m in result['relationship_list'][0]:
                 setattr(obj, m['name'], [])
                 for record in m['records']:
-                    robj = SugarObject()
-                    robj.module = m['name']
+                    robj = SugarObject(module=m['name'])
                     for key in record:
                         setattr(robj, key, record[key]['value'])
                     getattr(obj, m['name']).append(robj)
@@ -88,8 +88,7 @@ class API:
         results = self._request('get_entries', data)['entry_list']
         ret = []
         for result in results:
-            obj = SugarObject()
-            obj.module = module
+            obj = SugarObject(module=module)
             for key in result['name_value_list']:
                 if isinstance(key, dict):
                     # No objects found
@@ -116,16 +115,14 @@ class API:
         entry_list = results['entry_list']
         ret = []
         for i, result in enumerate(entry_list):
-            obj = SugarObject()
-            obj.module = q.module
+            obj = SugarObject(module=q.module)
             for key in result['name_value_list']:
                 setattr(obj, key, result['name_value_list'][key]['value'])
             if results['relationship_list']:
                 for m in results['relationship_list'][i]['link_list']:
                     setattr(obj, m['name'], [])
                     for record in m['records']:
-                        robj = SugarObject()
-                        robj.module = m['name']
+                        robj = SugarObject(module=m['name'])
                         for k in record['link_value']:
                             setattr(robj, k, record['link_value'][k]['value'])
                         getattr(obj, m['name']).append(robj)
@@ -278,6 +275,9 @@ class SugarObject:
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
+            if key == "module":
+                cls = value[:-1].replace('ie','y').title()
+                self.__class__ = getattr(sys.modules['sugarcrm'], cls)
 
     @property
     def fields(self):
