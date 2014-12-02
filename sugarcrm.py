@@ -18,7 +18,7 @@ import sys
 import requests
 
 
-class API:
+class Session:
 
     def __init__(self, url, username, password, app="Python", lang="en_us"):
         self.url = url
