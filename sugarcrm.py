@@ -188,7 +188,7 @@ class Session:
         data = [
             {
                 'user_name': username,
-                'password': hashlib.md5(password).hexdigest()
+                'password': hashlib.md5(password.encode('utf8')).hexdigest()
             },
             app,
             [{

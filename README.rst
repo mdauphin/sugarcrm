@@ -59,7 +59,6 @@ Example Usage
     print "Found %d emails" % len(emails)
 
 
-
 Install
 -------
 
