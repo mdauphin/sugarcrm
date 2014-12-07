@@ -4,6 +4,15 @@ SugarCRM
 
 Python client for SugarCRM API.
 
+.. image:: http://img.shields.io/pypi/v/sugarcrm.svg
+    :target: https://pypi.python.org/pypi/sugarcrm
+
+.. image:: http://img.shields.io/pypi/dm/sugarcrm.svg
+    :target: https://pypi.python.org/pypi/sugarcrm
+
+.. image:: http://img.shields.io/pypi/l/sugarcrm.svg
+    :target: https://github.com/ryanss/sugarcrm/blob/master/LICENSE
+
 
 Example Usage
 -------------

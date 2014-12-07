@@ -6,7 +6,7 @@
 #  Website: https://github.com/ryanss/sugarcrm
 #  License: MIT (see LICENSE file)
 
-__version__ = '0.1-dev'
+__version__ = '0.1'
 
 
 import base64
