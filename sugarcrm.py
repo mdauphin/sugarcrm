@@ -115,7 +115,7 @@ class Session:
         entry_list = results['entry_list']
         ret = []
         for i, result in enumerate(entry_list):
-            obj = SugarObject(module=q.module)
+            obj = SugarObject(module=q.module, __class__=q.__class__)
             for key in result['name_value_list']:
                 setattr(obj, key, result['name_value_list'][key]['value'])
             if results['relationship_list']:
@@ -276,8 +276,11 @@ class SugarObject:
         for key, value in kwargs.items():
             setattr(self, key, value)
             if key == "module":
-                cls = value[:-1].replace('ie','y').title()
-                self.__class__ = getattr(sys.modules['sugarcrm'], cls)
+                try:
+                    cls = value[:-1].replace('ie','y').title()
+                    self.__class__ = getattr(sys.modules['sugarcrm'], cls)
+                except:
+                    pass
 
     @property
     def fields(self):
@@ -360,6 +363,10 @@ class Quote(SugarObject):
 
 class Report(SugarObject):
     module = "Reports"
+
+
+class User(SugarObject):
+    module = "Users"
 
 
 class SugarError(Exception):
