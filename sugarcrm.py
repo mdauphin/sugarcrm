@@ -5,8 +5,9 @@
 #  Author:  ryanss <ryanssdev@icloud.com>
 #  Website: https://github.com/ryanss/sugarcrm
 #  License: MIT (see LICENSE file)
+#  Version: 0.1.1 (October 4, 2015)
 
-__version__ = '0.1'
+__version__ = '0.1.1'
 
 
 import base64

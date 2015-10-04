@@ -372,6 +372,10 @@ SugarCRM Objects
     >>> print report.module
     "Reports"
 
+    >>> user = sugarcrm.User()
+    >>> print user.module
+    "Users"
+
 
 Development Version
 -------------------
