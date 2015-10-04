@@ -38,7 +38,7 @@ class Session:
         r = requests.post(self.url, data=data)
         if r.status_code == 200:
             return json.loads(r.text.replace("&#039;", "'"))
-        raise SugarError("SugarCRM API _request returned status code %d (%s)" \
+        raise SugarError("SugarCRM API _request returned status code %d (%s)"
                          % (r.status_code, r.reason))
 
     def get_available_modules(self, filter="default"):
@@ -83,7 +83,7 @@ class Session:
     def get_entries(self, module, ids, track_view=False):
         """Retrieves a list of objects based on specified object IDs."""
         if not isinstance(ids, list):
-            ids = [ids,]
+            ids = [ids, ]
         data = [self.session_id, module, ids, [], [], track_view]
         results = self._request('get_entries', data)['entry_list']
         ret = []
@@ -251,7 +251,7 @@ class Session:
     def set_relationship(self, parent, child, delete=False):
         """Sets relationships between two records."""
         delete = int(delete)
-        related_ids = [child.id,]
+        related_ids = [child.id, ]
         name_value_list = [{
             'name': "%s_%s" % (parent.module.lower(), child.module.lower()),
             'value': 'Other',
@@ -277,7 +277,7 @@ class SugarObject:
             setattr(self, key, value)
             if key == "module":
                 try:
-                    cls = value[:-1].replace('ie','y').title()
+                    cls = value[:-1].replace('ie', 'y').title()
                     self.__class__ = getattr(sys.modules['sugarcrm'], cls)
                 except:
                     pass
@@ -303,7 +303,8 @@ class SugarObject:
             if q:
                 q += "AND "
             if value.find('%') >= 0:
-                q += "%s.%s LIKE '%s' " % (self.module.lower(), key, str(value))
+                q += "%s.%s LIKE '%s' " \
+                     % (self.module.lower(), key, str(value))
             else:
                 q += "%s.%s='%s' " % (self.module.lower(), key, str(value))
         return q
